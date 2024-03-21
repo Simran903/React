@@ -5,6 +5,7 @@ import useFetch from '../../../hooks/useFetch'
 import { useSelector } from 'react-redux'
 import Img from '../../../components/lazyLoadImage/Img'
 import ContentWrapper from '../../../components/contentWrapper/ContentWrapper'
+
 const HeroBanner = () => {
     const navigate = useNavigate()
     const [background, setBackground] = useState("")
@@ -17,12 +18,18 @@ const HeroBanner = () => {
         setBackground(bg)
     }, [data])
 
-
-    const searchQueryHandler = (event) => {
-        if (event.key === "Enter" && query.length > 0) {
+    const searchQueryHandler = () => {
+        if (query.length > 0) {
             navigate(`/search/${query}`)
         }
     }
+
+    const handleKeyUp = (event) => {
+        if (event.key === "Enter") {
+            searchQueryHandler()
+        }
+    }
+
     return (
         <div className='heroBanner'>
             {!loading && <div className="backdrop-img">
@@ -40,9 +47,9 @@ const HeroBanner = () => {
                         <input
                             type="text"
                             placeholder='Search for a movie or TV show...'
-                            onKeyUp={searchQueryHandler}
-                            onChange={(e) => setQuery((e.target.value))} />
-                        <button>
+                            onKeyUp={handleKeyUp}
+                            onChange={(e) => setQuery(e.target.value)} />
+                        <button onClick={searchQueryHandler}>
                             Search
                         </button>
                     </div>
